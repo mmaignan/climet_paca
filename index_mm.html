@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=yes">
+    <meta name="description" content="">
+	<meta name="keywords" content="leaftlet, CRIGE PACA, webmapping, stations météorologiques, climat">
+    <meta name="author" content="Maxime MAIGNAN">
+	<meta name="robots" content="index, follow">
+	<meta name="copyright" content="CRIGE PACA 2016">
+
+    <title>Atlas CLIMET-PACA</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+	
+	<!-- Style calls -->
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+		<link rel="stylesheet" href="L.plugins/Leaflet.markercluster-leaflet-0.7/dist/MarkerCluster.css" />
+		<link rel="stylesheet" href="L.plugins/Leaflet.markercluster-leaflet-0.7/dist/MarkerCluster.Default.css" />
+		<link rel="stylesheet" href="L.plugins/Leaflet.markercluster-leaflet-0.7/screen.css" />
+		<link rel="stylesheet" href="L.plugins/Leaflet.draw-master/dist/leaflet.draw.css" />
+		<link rel="stylesheet" href="L.plugins/Controlmouseposition/L.Control.MousePosition.css" />	
+		<link rel="stylesheet" href="L.plugins/leaflet-easyPrint-gh-pages/dist/easyPrint.css"/>	
+		<link rel="stylesheet" href="L.plugins/leaflet-locateconbtrol-gh-pages/dist/L.Control.Locate.min.css" />
+		<link rel="stylesheet" href="L.plugins/Leaflet.groupedlayercontrol-gh-pages/dist/leaflet.groupedlayercontrol.css" />	
+		<!--<link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/leaflet.fullscreen.css"  />-->
+		<link rel="stylesheet" href="http://k4r573n.github.io/leaflet-control-osm-geocoder/Control.OSMGeocoder.css"/>
+		<!--<link rel="stylesheet" href="L.plugins/GpLeaflet/GpPluginLeaflet.css" />-->
+		<link rel="stylesheet" href="css/localstyle.css"/>
+		<link rel="stylesheet" href="L.plugins/Leaflet.StyledLayerControl-master/src/css/styledLayerControl.css" />
+		
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.css" />
+
+		
+	<!-- Plugins calls -->
+		<script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+		<script src="L.plugins/Leaflet.markercluster-leaflet-0.7/dist/leaflet.markercluster-src.js"></script>
+		<script src="L.plugins/Controlmouseposition/L.Control.MousePosition.js"></script>
+		<script src="L.plugins/leaflet-easyPrint-gh-pages/dist/leaflet.easyPrint.js"></script>
+		<script src="L.plugins/leaflet-ajax-gh-pages/dist/leaflet.ajax.min.js"></script>
+		<script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+		<!--<script src="L.plugins/Leaflet.groupedlayercontrol-gh-pages/dist/leaflet.groupedlayercontrol.js"></script>-->
+		<script src="L.plugins/Leaflet.StyledLayerControl-master/src/styledLayerControl.js"></script>
+		<script src="L.plugins/Leaflet.draw-master/dist/leaflet.draw-src.js"></script>
+		<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/Leaflet.fullscreen.min.js'></script>
+		<script src="http://k4r573n.github.io/leaflet-control-osm-geocoder/Control.OSMGeocoder.js"></script>
+		<script src="L.plugins/Leaflet.StyledLayerControl-master/src/styledLayerControl.js"></script>
+		
+		<!-- Extension Géoportail pour Leaflet -->
+		<!--<script data-key="cm6m6dbdfym0otrxzqu7vwyd" src="L.plugins/GpLeaflet/GpPluginLeaflet.js"></script>
+
+		<script type="text/javascript" src="http://api.ign.fr/geoportail/api/js/latest/Geoportal.js"> </script>-->
+	
+	<!-- DATA -->
+		<script src="geojson/limites_dept.js" type="text/javascript"></script>
+		<script src="geojson/limites_comm.js" type="text/javascript"></script>
+		<script src="geojson/stations.js" type="text/javascript"></script>	
+		<script src="geojson/inra.js" type="text/javascript"></script>
+		<script src="geojson/infoclimat.js" type="text/javascript"></script>
+		<script src="geojson/cirame.js" type="text/javascript"></script>
+		<script src="geojson/meteo_france.js" type="text/javascript"></script>
+		
+		<script src="geojson/pluie.js" type="text/javascript"></script>	
+		<script src="geojson/vent.js" type="text/javascript"></script>	
+		<script src="geojson/temperature.js" type="text/javascript"></script>	
+		<script src="geojson/humidite.js" type="text/javascript"></script>			
+		<script src="geojson/humectation.js" type="text/javascript"></script>			
+		<script src="geojson/pression.js" type="text/javascript"></script>	
+		<script src="geojson/rayonnement.js" type="text/javascript"></script>
+		<script src="geojson/json_biomto0" type="text/javascript"></script>	
+		<script src="geojson/point_rosee.js" type="text/javascript"></script>
+		<script src="geojson/test.js" type="text/javascript"></script>	
+		
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+			 <h1><a href="">Atlas CLIMET-PACA </a></h1>
+			 <span class="subtitle">La météo et le climat en région Provence-Alpes-Côte d’Azur </span>
+			 <ul class="sidebar-nav">
+				<!--<li class="sidebar-brand"></li>-->
+				<li>
+				Extraction (Pro)
+					<ul class="sublist">
+						<li>
+							<a href="http://www.crige-paca.org/geoportail/geocatalogue.html?id_lot_donnee_carto=537" target="blank">Localisation des stations météorologiques - Région PACA - 2015</a>
+						</li>
+					</ul>
+				</li>
+				<!--<li>
+					<a href="OpenData.html"  target="blank">Téléchargement (OpenData)</a>
+				</li>-->
+                <li>
+                    <a href="http://www.crige-paca.org/geoportail/visualiseur.html" target="blank">Autres visionneuses</a>
+                </li>
+                <li>À propos
+					<ul class="sublist">
+						<li>
+							<a href="http://www.crige-paca.org/" target="blank">Partenaires et perspectives</a>
+						</li>
+						<li>
+							<a href="http://www.crige-paca.org/" target="blank">Légendes</a>
+						</li>
+						<li>
+							<a href="http://www.crige-paca.org/" target="blank">Crédits</a>
+						</li>
+					</ul> 
+                </li>
+                <li>
+                    <a href="http://www.crige-paca.org/no_cache/contact.html" target="blank">Contact</a>
+                </li>
+			</ul>
+			<ul class="logos" 
+				style="list-style: inside none none;
+			">
+				<li>
+					<a href="http://www.crige-paca.org" title="CRIGE PACA" target="_blank"> <img src="img/CRIGE_NEW.png" height="60"> </a>
+				</li>
+				<li>	
+					<a href="http://geographr.typepad.fr/" title="GeographR" target="_blank" ><img src="img/geographr.png" height="60">	</a>		
+				</li>
+				<li>
+					<a href="http://www.regionpaca.fr" title="Région PACA" target="_blank"><img src="img/region_paca.png" height="60"></a>
+				</li>
+				<li>
+					<a href="http://www.agrometeo.fr/" title="CIRAME Agrométéorologie" target="_blank"><img src="img/cirame_agrometeo.png" height="60">  </a>
+				</li>
+				<li>
+					<a href="http://www.meteofrance.com/" title="Météo France" target="_blank"><img src="img/meteo_france.png" height="60"></a>
+				</li>
+				<li>
+					<a href="http://www.inra.fr/" title="INRA" target="_blank"><img src="img/inra.png" height="60"></a>
+				</li>
+            </ul>
+
+
+		</div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+		
+			<div id="map">
+			<style type="text/css">
+				div.leaflet-control-layers.leaflet-control a.leaflet-control-layers-toggle {
+					<!--background-image: url("img/pencil.png");-->
+				}
+			</style>
+				<script>
+
+		window.onload = function () {
+			var key = "cm6m6dbdfym0otrxzqu7vwyd";
+		
+			var layerIGNScanStd = "GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN-EXPRESS.STANDARD.";
+		
+			var url = "http://wxs.ign.fr/" + key + "/geoportail/wmts";
+		
+			var ign = L.tileLayer.WMTS ( url,{
+				layer: layerIGNScanStd,
+				style: "normal",
+				format: "image/jpeg",
+				attribution:'&copy; <a href="http://www.ign.fr/">IGN-France</a>'
+			} );
+		}
+		
+		
+		// Adding layers 
+
+		var pci_04 = L.tileLayer.wms("http://geoservices.crige-paca.org/geoserver/pci_2016_04/wms?", {
+			layers: 'pci_2016_04:ECRITURE_ATTRIBUT, pci_2016_04:PARCELLE',
+			format: 'image/png',
+			attribution: "DGFIP"
+		});
+		
+		var pci_05 = L.tileLayer.wms("http://geoservices.crige-paca.org/geoserver/pci_2016_05/wms?", {
+			layers: ' pci_2016_05:ECRITURE_ATTRIBUT, pci_2016_05:PARCELLE',
+			format: 'image/png',
+			attribution: "DGFIP"
+		});
+		
+		var pci_06 = L.tileLayer.wms("http://geoservices.crige-paca.org/geoserver/pci_2016_06/wms?", {
+			layers: 'pci_2016_06:PARCELLE',
+			format: 'image/png',
+			attribution: "DGFIP"
+		});
+		
+		var pci_13 = L.tileLayer.wms("http://geoservices.crige-paca.org/geoserver/pci_2016_13/wms?", {
+			layers: 'pci_2016_13:ECRITURE_ATTRIBUT,pci_2016_13:PARCELLE',
+			format: 'image/png',
+			attribution: "DGFIP"
+		});
+		
+		var pci_83 = L.tileLayer.wms("http://geoservices.crige-paca.org/geoserver/pci_2016_83/wms?", {
+			layers: 'pci_2016_83:PARCELLE',
+			format: 'image/png',
+			attribution: "DGFIP"
+		});
+		
+		var pci_84 = L.tileLayer.wms("http://geoservices.crige-paca.org/geoserver/pci_2016_84/wms?", {
+			layers: 'pci_2016_84:PARCELLE',
+			format: 'image/png',
+			attribution: "DGFIP"
+		});
+			
+		var AgroMeteo_RisqGelFev = L.tileLayer('http://www.agrometeo.fr/cartes/tuiles/ccvba_10_2_2/{z}/{x}/{y}.png', {
+				attribution:'AgroMétéo',
+				tms: true	
+		});
+
+		var	AgroMeteo_RRh = L.tileLayer('http://www.agrometeo.fr/cartes/tuiles/RRh/{z}/{x}/{y}.png', {
+				attribution:'AgroMétéo',
+				tms: true	
+		});
+		var	AgroMeteo_RRp = L.tileLayer('http://www.agrometeo.fr/cartes/tuiles/RRp/{z}/{x}/{y}.png', {
+				attribution:'AgroMétéo',
+				tms: true	
+		});
+		var	AgroMeteo_RRe = L.tileLayer('http://www.agrometeo.fr/cartes/tuiles/RRe/{z}/{x}/{y}.png', {
+				attribution:'AgroMétéo'
+		});
+		var	AgroMeteo_RRa = L.tileLayer('http://www.agrometeo.fr/cartes/tuiles/RRa/{z}/{x}/{y}.png', {
+				attribution:'AgroMétéo',
+				tms: true	
+		});
+		
+		var tmoy_9110 = L.tileLayer.wms("http://geoservices.crige-paca.org/geoserver/CLIMET-PACA/wms?", {
+			layers: 'CLIMET-PACA:Tmoy_moy_annuel_nodata300',
+			format: 'image/png',
+		attribution: 'GeographR, <a href="http://www.mmco.fr/" target="_blank">MMCO</a>'
+		});
+		
+		var tmoy_rcp85 = L.tileLayer.wms("http://geoservices.crige-paca.org/geoserver/CLIMET-PACA/wms?", {
+			layers: 'CLIMET-PACA:Tmoy_moy_annuel_85B_nodata300',
+			format: 'image/png',
+		attribution: 'GeographR, <a href="http://www.mmco.fr/" target="_blank">MMCO</a>'
+		});
+		
+		
+		var OSM = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>'
+		});
+		
+	// Initalizing map
+		var map = L.map('map', {
+			center: [43.9 , 4.77],
+			zoom: 8,
+			layers: [OSM, pci_04, pci_05, pci_06, pci_13, pci_83, pci_84]
+		});
+	
+	// Creating custom markers
+	
+		var ecrIcon = new L.Icon({
+			iconUrl: 'img/pencil.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var obsIcon = new L.Icon({
+			iconUrl: 'img/eye_337255_chanut.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var infclimIcon = new L.Icon({
+			iconUrl: 'img/marker-infoclimat.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var inraIcon = new L.Icon({
+			iconUrl: 'img/marker_inra.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var cirameIcon = new L.Icon({
+			iconUrl: 'img/marker_cirame.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+
+		var meteofrIcon = new L.Icon({
+			iconUrl: 'img/marker_meteofr.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var pluieIcon = new L.Icon({
+			iconUrl: 'img/pluie.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var ventIcon = new L.Icon({
+			iconUrl: 'img/vent.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+
+		var tempIcon = new L.Icon({
+			iconUrl: 'img/temp.png',
+			iconSize: [15, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var humidIcon = new L.Icon({
+			iconUrl: 'img/humid.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var humecIcon = new L.Icon({
+			iconUrl: 'img/humec.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var pressIcon = new L.Icon({
+			iconUrl: 'img/press2on.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var rayIcon = new L.Icon({
+			iconUrl: 'img/rayon.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+		var biometeIcon = new L.Icon({
+			iconUrl: 'img/frogzilla.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+
+		var roseeIcon = new L.Icon({
+			iconUrl: 'img/rosee.png',
+			iconSize: [35, 35],
+			iconAnchor: [12, 41],
+			popupAnchor: [1, -34]
+		});
+		
+	// Adding DATA
+			// DATA lim_adm
+		var limites_dept = L.geoJson(limites_dept, {
+			color :'black',
+			weight : 3,
+			opacity : .7
+		}).addTo(map);
+		
+		/*var limites_comm = L.geoJson(limites_comm, {
+			color :'black',
+			weight : 1,
+			opacity : .5
+		}).addTo(map);*/
+		
+	
+	// Clustering
+		// DATA Stations
+			
+		var markersS = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="station" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #26C4EC; background-color: #26C4EC; border-radius: 9px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+						
+		var geoJsonStations = L.geoJson(stations, {
+				 pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: obsIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+		});
+		markersS.addLayer(geoJsonStations);
+		map.addLayer(markersS);
+		map.fitBounds(markersS.getBounds()); 
+						
+		// DATA InfoClimat
+		var markersIC = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="infoclimat" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #10094C; background-color:  #10094C; border-radius: 3px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+					
+		var geoJsonInfoclimat = L.geoJson(infoclimat, {
+				 pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: infclimIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+		});
+		markersIC.addLayer(geoJsonInfoclimat);
+		
+		// DATA Inra
+		var markersI = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="inra" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #3A9D23; background-color:  #3A9D23; border-radius: 3px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+					
+		var geoJsonInra = L.geoJson(inra, {
+				 pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: inraIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+			});
+		markersI.addLayer(geoJsonInra);
+		//map.addLayer(markersI);
+		
+		
+			// DATA Cirame (FFFF88)
+		var markersC = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="cirame" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #FEE347; background-color: #FEE347; border-radius: 3px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+					
+		var geoJsonCirame = L.geoJson(cirame, {
+				 pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: cirameIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+			});
+		markersC.addLayer(geoJsonCirame);	
+		
+		// DATA Meteo France
+		var markersM = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="meteofr" style="background-color: #4e7aa4; box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #4e7aa4;  border-radius: 3px; color :white; height: 35px; margin:auto ; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+					
+		var geoJsonMeteofr = L.geoJson(meteo_france, {
+				 pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: meteofrIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+			});
+		markersM.addLayer(geoJsonMeteofr);
+		
+		var markersPluie = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="pluie" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #048B9A; background-color: #048B9A; border-radius: 45px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+		
+		var geoJsonPluie = L.geoJson(pluie, {
+				pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: pluieIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+			});
+		markersPluie.addLayer(geoJsonPluie);	
+		
+		var markersVent = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="vent" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #BBD2E1; background-color: #BBD2E1; border-radius: 45px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+		
+		var geoJsonVent = L.geoJson(vent, {
+				pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: ventIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+			});
+		markersVent.addLayer(geoJsonVent);
+		
+		var markersTemp = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="temp" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #ED7F10; background-color: #ED7F10; border-radius: 45px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+		
+		var geoJsonTemp = L.geoJson(temperature, {
+				pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: tempIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+			});
+		markersTemp.addLayer(geoJsonTemp);
+		
+		var markersHumid = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="humid" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #74D0F1; background-color: #74D0F1; border-radius: 45px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+		
+		var geoJsonHumid = L.geoJson(humidite, {
+				pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: humidIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+		});
+		markersHumid.addLayer(geoJsonHumid);
+	
+		var markersHumec = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="humec" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #A9EAFE; background-color: #A9EAFE; border-radius: 45px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+		
+		var geoJsonHumec = L.geoJson(humectation, {
+				pointToLayer: function(feature, latlng) {
+					var marker = L.marker(latlng,{icon: humecIcon});
+					return marker;
+				},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+		});
+		markersHumec.addLayer(geoJsonHumec);
+
+		var markersPression = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="pression" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #685E43; background-color: #685E43; border-radius: 45px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});	
+		var geoJsonPression = L.geoJson(pression, {
+			pointToLayer: function(feature, latlng) {
+				var marker = L.marker(latlng,{icon: pressIcon});
+				return marker;
+			},
+			onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				}
+			});
+		markersPression.addLayer(geoJsonPression);
+
+		var markersRayon = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="rayon" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #e6cb0f; background-color: #e6cb0f; border-radius: 45px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+		
+		var geoJsonRayon = L.geoJson(rayonnement, {
+			pointToLayer: function(feature, latlng) {
+				var marker = L.marker(latlng,{icon: rayIcon});
+				return marker;
+			},
+			onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+			}
+		});
+		markersRayon.addLayer(geoJsonRayon);
+
+		
+		var markersB = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="biometeo" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #4CA66B; background-color: #4CA66B; border-radius: 45px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+		
+		var geoJsonBiometeo = L.geoJson(test, {
+			pointToLayer: function(feature, latlng) {
+				var marker = L.marker(latlng,{icon: biometeIcon});
+				return marker;
+			},
+			onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+			}
+		});
+		markersB.addLayer(geoJsonBiometeo);
+	
+		var markersRosee = L.markerClusterGroup({
+			iconCreateFunction: function(cluster) {
+				return L.divIcon({ html: '<div class="rosee" style="box-shadow: 0px 0px ' + cluster.getChildCount() +'px '+ cluster.getChildCount() +'px #FE96A0; background-color: #FE96A0; border-radius: 45px; color :white; height: 35px; margin-left: -17px; margin-top: -10px; opacity: 1; padding-top:5px; text-align:center;  width: 35px; z-index: 234;">' + cluster.getChildCount() + '</div>' });
+			}
+		});
+		var geoJsonRosee = L.geoJson(point_rosee, {
+			pointToLayer: function(feature, latlng) {
+				var marker = L.marker(latlng,{icon: roseeIcon});
+				return marker;
+			},
+				onEachFeature: function (feature, layer) {
+					layer.bindPopup("<h3>Informations</h3><p><strong> Nom : </strong>" + feature.properties.nom + "<br/><strong> Proprietaire : </strong>" + feature.properties.proprietai +"<br/><strong> Commune : </strong>" + feature.properties.commune + "<br/><strong> Debut de l'homogeneisation : </strong>" + feature.properties.debut_homo + "<br/><strong> Fin de l'homogeneisation : </strong>" + feature.properties.fin_homoge +"<br/><strong> Type : </strong>" + feature.properties.type + "<br/><strong> Variables observees : </strong>" + feature.properties.variables + "</p><h3>Coordonnees geographiques</h3><br/><strong> X : </strong>" + feature.properties.X +"<br/><strong> Y : </strong>" + feature.properties.Y+"<br/><strong> Altitude (metres) : </strong>" + feature.properties.altitude+"<br/><strong> Latitude : </strong>" + feature.properties.latitude + "<br/><strong> Longitude : </strong>" + feature.properties.longitude +  "</p>");
+				},
+			});
+		markersRosee.addLayer(geoJsonRosee);
+		
+		// Initialise the FeatureGroup to store editable layers
+		var drawnItems = new L.FeatureGroup();
+		map.addLayer(drawnItems);
+
+		// Initialise the draw control and pass it the FeatureGroup of editable layers
+		/*var drawControl = new L.Control.Draw({
+			edit: {
+				featureGroup: drawnItems
+			}
+		});
+		map.addControl(drawControl);
+		
+		map.on('draw:created', function (e) {
+			var type = e.layerType,
+				layer = e.layer;
+		}
+
+		// Do whatever else you need to. (save to db, add to map etc)
+			map.addLayer(layer);
+		});
+		
+		map.on('draw:edited', function (e) {
+			var layers = e.layers;
+			layers.eachLayer(function (layer) {
+        //do whatever you want, most likely save back to db
+			});
+		});
+		L.control.layers({'drawlayer':drawnItems}, { position: 'topleft', collapsed: false }).addTo(map);*/
+		
+		map.addControl(new L.Control.Draw({
+			edit: {
+				featureGroup: drawnItems,
+				poly : {
+					allowIntersection : false
+				}
+			},
+			draw: {
+				polygon : {
+					allowIntersection: false,
+					showArea:true
+				}
+			}
+		}));
+
+		map.on('draw:created', function(event) {
+			var layer = event.layer;
+			drawnItems.addLayer(layer);
+		});
+
+	// Couches et surCouches
+	
+		var baseMaps = [
+					/*"IGNF" : ign,*/
+			{
+				groupname : "Divisions administratives",
+				expanded : false,
+				layers :{"<span>OpenStreetMap</span><h3>Cadastre</h3>": OSM}
+			},{
+				groupname : "Cadastre",
+				expanded : false,
+				layers :{					
+					"Cadastre 04" : pci_04,
+					"Cadastre 05" : pci_05,
+					"Cadastre 06" : pci_06,
+					"Cadastre 13" : pci_13,
+					"Cadastre 83" : pci_83,
+					"<span>Cadastre 84</span><h3>Divisions administratives</h3>" : pci_84
+				}
+			}
+		];
+	
+		
+		var surCouches = [
+			{
+				groupname : "Divisions administratives",
+				expanded : false,
+				layers :{
+					"<span>Départements</span><h3>Stations météo</h3>" : limites_dept
+				}
+			},{
+				groupname : "Stations météo",
+				expanded : false,
+				layers :{
+					"<img src='img/eye_337255_chanut.png' width='25px' height='25px'/> <span class='station-item'>Toutes les stations</span><h4>Propriétaires</h4>": markersS, 		
+					"<img src='img/marker-infoclimat.png' width='25px' height='25px'/> <span class='infclim-item'>InfoClimat</span>": markersIC,
+					"<img src='img/marker_inra.png' width='25px' height='25px'/> <span class='inra-item'>INRA</span>": markersI,
+					"<img src='img/marker_cirame.png' width='25px' height='25px'/> <span class='cirame-item'>CIRAME</span>": markersC,
+					"<img src='img/marker_meteofr.png' width='25px' height='25px'/> <span class='meteofr-item'>Météo France</span><h4>Paramètres mesurés</h4>": markersM,
+					"<img src='img/pluie.png' width='25px' height='25px'/> <span class='pluie-item'>Pluie</span>": markersPluie,
+					"<img src='img/vent.png'  height='30px'/> <span class='vent-item'>Vent</span>" : markersVent,
+					"<img src='img/temp.png' width='10px' height='30px'/> <span class='temp-item'>Température</span>" : markersTemp,
+					"<img src='img/humid.png' width='25px' height='25px'/> <span class='humid-item'>Humidité</span>" : markersHumid,
+					"<img src='img/humec.png' width='25px' height='25px'/> <span class='humec-item'>Humectation</span>"  : markersHumec,
+					"<img src='img/press2on.png' width='25px' height='25px'/> <span class='press-item'>Pression</span>" : markersPression,
+					"<img src='img/rayon.png' width='25px' height='25px'/> <span class='ray-item'>Rayonnement</span>" : markersRayon,
+					"<img src='img/frogzilla.png' width='25px' height='25px'/> <span class='biometeo-item'>Biométéo</span>" : markersB,
+					"<img src='img/rosee.png' width='25px' height='25px'/> <span class='rosee-item'>Rosée</span><h3>Interpolations</h3><h4>Températures de l'air (°C)</h4>": markersRosee
+				}
+			},{	
+				groupname : "Températures moyennes annuelles de l'air (°C)",
+				expanded : false,
+				layers :{
+					"<span>Moyennes annuelles 1991-2010</span>": tmoy_9110,
+					"<span>moyennes annuelles 2036-2055, RCP 8.5</span><div class='legend'><img src='img/lgd_tmoy.png'></div><h4>Indices agrométéorologiques</h4>": tmoy_rcp85
+				}
+			},{	
+				groupname : "Indices agrométéorologiques",
+				expanded : false,
+				layers :{
+					"<span>Risque de gel au mois de février</span><div class='legend'><img src='img/lgd_gel.png'>": AgroMeteo_RisqGelFev,
+					"<span>Cumul de précipitations hivernal</span>": AgroMeteo_RRh,
+					"<span>Cumul de précipitations printanier</span>": AgroMeteo_RRp,
+					"<span>Cumul de précipitations estival</span>": AgroMeteo_RRe,
+					"<span>Cumul de précipitations automnal</span><div class='legend'><img src='img/lgd_ppt.png'>": AgroMeteo_RRa
+				}
+			}
+		];
+
+		var options = {
+			container_width     : "300px",
+			container_height     : "900px",
+			//container_maxHeight : "350px", 
+			//group_maxHeight     : "80px",
+			exclusive           : false
+		};
+		
+		map.addLayer(OSM);
+		
+	// Adding controls to the map	
+		//L.control.layers(baseMaps).addTo(map);
+		
+		var osmGeocoder = new L.Control.OSMGeocoder({
+			collapsed : true,
+			text: 'Recherche'});
+			map.addControl(osmGeocoder);
+		
+		//L.Control.styledLayerControl(baseMaps, surCouches, options).addTo(map);
+		var control = L.Control.styledLayerControl(baseMaps, surCouches, options);
+		map.addControl(control);
+		
+		//baseMaps["OpenStreetMap"].addTo(map);
+		
+		L.control.mousePosition().addTo(map);
+		
+		L.control.scale({
+			position:'bottomright'}).addTo(map);
+			
+		L.control.locate().addTo(map);
+			
+		L.control.fullscreen().addTo(map);
+		
+		L.easyPrint({
+			title: 'Imprimer',
+		}).addTo(map);
+		
+			</script>
+			<div class="lyr_title">
+				<!--<h2>Affichage des couches</h2>
+				<h3>Fonds de cartes</h3>
+			<div class="row_bkg"> <a href="#" id="backgroundbutton" class="btn btn-inverse" rel="popover">Fond de plan</a></div>
+			<div class="row_vct"> <a href="#" id="vectorbutton" class="btn btn-inverse" rel="popover">Couches thématiques</a></div>-->
+			</div>
+
+			<div id="popover-content" class="hide">
+				<div>Opacity:
+					<input type="text" class="span2" value="50" id="rangeSlider" data-slider-min="10" data-slider-max="100" data-slider-step="5" data-slider-value="50">
+				</div>
+			</div>
+    
+			<div id="popover2-content" class="hide">
+				<div>Opacity:
+					<input type="text" class="span2" value="50" id="rangeSlider2" data-slider-min="10" data-slider-max="100" data-slider-step="5" data-slider-value="50">
+				</div>
+			</div>
+		</div>
+	</div>
+        <!-- /#page-content-wrapper -->
+	
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+</body>
+
+</html>
